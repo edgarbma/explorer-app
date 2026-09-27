@@ -12,28 +12,41 @@ const API_KEY: string =
         );
     }
 
-const API_URL: string =
-    "https://api.restcountries.com/countries/v5" +
-    "?response_fields=names.common, codes.alpha_2, flag.url_svg," +
-    "flag.description, population, region, capitals" +
-    "&limit=24";
+const BASE_URL: string =
+    "https://api.restcountries.com/countries/v5";
 
-export async function fetchCountries():Promise<Country[]> {
-    const response: Response = await fetch(API_URL, {
-        headers: {
-            Authorization: `Bearer ${API_KEY}`,
-        },
-    });
+const FIELDS: string =
+    "names.common,codes.alpha_2,flag.url_svg,flag.description,population,region,capitals";
 
-    if (!response.ok) {
-        throw new Error(
-            `No fue posible obtener los paises. codigo HTTP: ${response.status}`
-        )
+export async function fetchAllCountries(): Promise<Country[]> {
+    let allCountries: Country[] = [];
+    let offset: number = 0;
+    const limit: number = 50;
+    let hasMore: boolean = true;
+
+    while (hasMore) {
+        const url: string =
+            `${BASE_URL}?response_fields=${FIELDS}&limit=${limit}&offset=${offset}`;
+
+        const response: Response = await fetch(url, {
+            headers: {
+                Authorization: `Bearer ${API_KEY}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                `No fue posible obtener los países. Código HTTP: ${response.status}`
+            );
+        }
+
+        const result: CountriesResponse =
+            (await response.json()) as CountriesResponse;
+
+        allCountries = allCountries.concat(result.data.objects);
+        hasMore = result.data.meta.more;
+        offset += limit;
     }
-
-    const result: CountriesResponse =
-        await response.json() as CountriesResponse;
-
-    return result.data.objects;
+    return allCountries;
 }
 
