@@ -18,7 +18,7 @@ const BASE_URL: string =
 const FIELDS: string =
     "names.common,codes.alpha_2,flag.url_svg,flag.description,population,region,capitals";
 
-export async function fetchAllCountries(): Promise<Country[]> {
+export async function fetchCountries(): Promise<Country[]> {
     let allCountries: Country[] = [];
     let offset: number = 0;
     const limit: number = 50;

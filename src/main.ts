@@ -1,9 +1,12 @@
 import './style.css';
 import type { Country } from "./types/country";
-import { fetchAllCountries } from './api/countries';
+import { fetchCountries } from './api/countries';
 import { renderCountryGrid } from "./render/countryGrid";
 import { filterCountries } from "./utils/filter";
 import { debounce } from './utils/format';
+import { renderEmpty, renderError, renderLoading } from "./render/states";
+
+const INITIAL_VISIBLE_COUNTRIES = 8;   
 
 const menuButton: HTMLButtonElement | null =
     document.querySelector<HTMLButtonElement>("#menu-toggle");
@@ -53,61 +56,70 @@ const countriesContainer: HTMLElement | null =
 
     let allCountries: Country[] = [];
 
-    function applyFilter():void {
-    if (
-        !countrySearch ||
-        !regionFilter ||
-        !countriesContainer
-    ) {
-        return;
-    }
-
-    const query: string =
-    countrySearch.value;
-
-    const region: string =
-    regionFilter.value;
-
-    const filteredCountries: Country[]=
-    filterCountries(
-        allCountries,
-        query,
-        region,
-    );
-
-    countriesContainer.innerHTML =
-    renderCountryGrid(filteredCountries);
-}
-
     const debouncedApplyFilter = debounce(applyFilter, 300);
     countrySearch?.addEventListener("input", debouncedApplyFilter);
     regionFilter?.addEventListener("change", applyFilter);
 
 async function loadCountries(): Promise<void> {
     if (!countriesContainer) {
-        console.error("No se encontró #countries-container.");
+        console.error("#countries-container not found.");
         return;
+    }
 
-    } try {
-        allCountries = await fetchAllCountries();
-        countriesContainer.innerHTML =
-        renderCountryGrid(allCountries);
+    countriesContainer.innerHTML = renderLoading();
+
+    try {
+        allCountries = await fetchCountries();
+
+        if (allCountries.length === 0) {
+            countriesContainer.innerHTML = renderEmpty("");
+            return;
+        }
+
+        const initialCountries: Country[] = allCountries.slice(
+            0,
+            INITIAL_VISIBLE_COUNTRIES
+        );
+        countriesContainer.innerHTML = renderCountryGrid(initialCountries);
 
     } catch (error: unknown) {
         const message: string =
             error instanceof Error
-            ? error.message
-            : "Ocurrio un error desconocido.";
-    
-        countriesContainer.innerHTML = `
-        <p
-            class="col-span-full text-center text-red-600"
-            role="alert"
-        >
-            ${message}
-        </p>
-        `;
+                ? error.message
+                : "Unknown error.";
+
+        console.error("Error loading the country:", message);
+
+        countriesContainer.innerHTML = renderError(
+            "Check your conection and try again."
+        );
+
+        const retryButton: HTMLButtonElement | null =
+            document.querySelector<HTMLButtonElement>("#retry-button");
+
+        retryButton?.addEventListener("click", (): void => {
+            void loadCountries();
+        });
     }
+}
+function applyFilter(): void {
+    if (!countriesContainer) return;
+
+    const query: string = countrySearch?.value ?? "";
+    const selectedRegion: string = regionFilter?.value ?? "";
+
+    const filteredCountries: Country[] = filterCountries(
+        allCountries,
+        query,
+        selectedRegion
+    );
+
+    if (filteredCountries.length === 0) {
+        countriesContainer.innerHTML = renderEmpty(query);
+        return;
+    }
+
+    countriesContainer.innerHTML = renderCountryGrid(filteredCountries);
 }
 
 void loadCountries();

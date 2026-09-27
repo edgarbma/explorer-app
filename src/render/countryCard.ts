@@ -25,10 +25,11 @@ export function renderCountryCard(
             <article class="group flex w-full flex-col overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-within:ring-2 focus-within:ring-orange-500">        
                 <div class="h-48 w-full overflow-hidden bg-blue-500 transition-colors duration-300 group-hover:bg-blue-600">           
                     <img 
-                        src="${country.flag.url_svg}" 
+                        src="${country.flag.url_svg || "/placeholder.svg"}"
                         alt="${flagDescription}" 
                         class="h-full w-full object-cover"
-                        loading="lazy">
+                        loading="lazy"
+                        onerror="this.onerror=null; this.src='/placeholder.png';">
                 </div>
                 <div class="flex flex-col items-center gap-6 p-5 text-center">
                     <div class="flex w-full flex-col items-center gap-2 text-center">
