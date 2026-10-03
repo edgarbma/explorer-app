@@ -1,52 +1,52 @@
-import type {
-    Country,
-    CountriesResponse,
-} from "../types/country";
+// Demo docente: lee los datos publicados en Vercel, sin consultar REST Countries.
+import type { Country } from "../types/country";
+import type { CountryDetail } from "../types/country-detail";
 
-const API_KEY: string =
-    import.meta.env.VITE_REST_COUNTRIES_API_KEY;
+// Comparte una sola carga del JSON durante la sesión de la página.
+const LOCAL_DATA_URL: string = "/data/countries.json";
 
-    if (!API_KEY) {
-        throw new Error(
-            "No se encontró la API key de REST Countries."
-        );
-    }
+let countriesPromise: Promise<CountryDetail[]> | undefined;
 
-const BASE_URL: string =
-    "https://api.restcountries.com/countries/v5";
+function loadCountries(): Promise<CountryDetail[]> {
+  if (!countriesPromise) {
+    countriesPromise = (async (): Promise<CountryDetail[]> => {
+      const response: Response = await fetch(LOCAL_DATA_URL);
 
-const FIELDS: string =
-    "names.common,codes.alpha_2,flag.url_svg,flag.description,population,region,capitals";
+      if (!response.ok) {
+        throw new Error(`Error al cargar los datos de la demo: ${response.status}`);
+      }
 
-export async function fetchCountries(): Promise<Country[]> {
-    let allCountries: Country[] = [];
-    let offset: number = 0;
-    const limit: number = 50;
-    let hasMore: boolean = true;
+      const data: unknown = await response.json();
+      if (!Array.isArray(data) || data.length === 0) {
+        throw new Error("El archivo de países está vacío o tiene un formato incorrecto.");
+      }
 
-    while (hasMore) {
-        const url: string =
-            `${BASE_URL}?response_fields=${FIELDS}&limit=${limit}&offset=${offset}`;
+      return data as CountryDetail[];
+    })().catch((error: unknown) => {
+      // Permite reintentar si la descarga del archivo falla.
+      countriesPromise = undefined;
+      throw error;
+    });
+  }
 
-        const response: Response = await fetch(url, {
-            headers: {
-                Authorization: `Bearer ${API_KEY}`,
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error(
-                `No fue posible obtener los países. Código HTTP: ${response.status}`
-            );
-        }
-
-        const result: CountriesResponse =
-            (await response.json()) as CountriesResponse;
-
-        allCountries = allCountries.concat(result.data.objects);
-        hasMore = result.data.meta.more;
-        offset += limit;
-    }
-    return allCountries;
+  return countriesPromise;
 }
 
+export async function fetchCountries(): Promise<Country[]> {
+  return [...await loadCountries()];
+}
+
+export async function fetchCountryByCode(code: string): Promise<CountryDetail> {
+  const countries: CountryDetail[] = await loadCountries();
+  const normalizedCode: string = code.trim().toUpperCase();
+  const country: CountryDetail | undefined = countries.find(
+    (item: CountryDetail): boolean =>
+      item.codes.alpha_2.toUpperCase() === normalizedCode,
+  );
+
+  if (!country) {
+    throw new Error("No se encontró el país solicitado en los datos de la demo.");
+  }
+
+  return country;
+}

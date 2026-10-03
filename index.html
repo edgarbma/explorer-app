@@ -5,6 +5,8 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>explorer-app</title>
+    <link rel="stylesheet" href="/src/style.css" />
+    
   </head>
   <body class="flex min-h-screen w-full flex-col bg-surface-surface text-text-primary antialiased">
 
@@ -50,56 +52,58 @@
       </div>
     </header>
 
-    <main class="flex-1 mx-auto w-[95%] max-w-none py-8">
-      <section class="mb-6 sm:mb-8">
-        <h1 class="font-primary text-2xl font-normal text-text-primary sm:text-4xl">
-          Where will you go next?
-        </h1>
-        <p class="font-secondary mt-2 text-sm uppercase tracking-wide text-text-secondary sm:text-base">
-          Find your country and use the available filters to explore its information.
-        </p>
-      </section>
-      
-      <div class="mb-8 flex flex-col gap-3 sm:mb-12 md:flex-row md:items-center md:gap-4">
-        <div class="relative w-full">
-          <img 
-            src="/src/assets/icons/search.svg" 
-            alt="Buscar" 
-            class="pointer-events-none absolute left-4 top-1/2 z-10 size-5 -translate-y-1/2 opacity-60"
-          />
-          <input
-            id="country-search"
-            type="search"
-            placeholder="Look for..."
-            class="h-12 w-full rounded-full border border-gray-300 bg-white pl-12 pr-5 transition-colors duration-200 hover:border-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
-          />
+    <main id="inicio" class="flex-1 mx-auto w-[95%] max-w-none py-8">
+      <section id="home-view">
+        <div class="mb-6 sm:mb-8">
+          <h1 class="font-primary text-2xl font-normal text-text-primary sm:text-4xl">
+            Where will you go next?
+          </h1>
+          <p class="font-secondary mt-2 text-sm uppercase tracking-wide text-text-secondary sm:text-base">
+            Find your country and use the available filters to explore its information.
+          </p>
+        </div>
+        
+        <div class="mb-8 flex flex-col gap-3 sm:mb-12 md:flex-row md:items-center md:gap-4">
+          <div class="relative w-full">
+            <img 
+              src="/src/assets/icons/search.svg" 
+              alt="Buscar" 
+              class="pointer-events-none absolute left-4 top-1/2 z-10 size-5 -translate-y-1/2 opacity-60"
+            />
+            <input
+              id="country-search"
+              type="search"
+              placeholder="Look for..."
+              class="h-12 w-full rounded-full border border-gray-300 bg-white pl-12 pr-5 transition-colors duration-200 hover:border-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+            />
+          </div>
+
+          <select id="region-filter" class="h-12 w-full rounded-full border border-gray-300 bg-white px-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 md:w-54 md:shrink-0">
+            <option value="">All regions</option>
+            <option value="africa">Africa</option>
+            <option value="americas">America</option>
+            <option value="asia">Asia</option>
+            <option value="europe">Europe</option>
+            <option value="oceania">Oceania</option>
+          </select>
         </div>
 
-        <select id="region-filter" class="h-12 w-full rounded-full border border-gray-300 bg-white px-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 md:w-54 md:shrink-0">
-          <option value="">All regions</option>
-          <option value="africa">Africa</option>
-          <option value="americas">America</option>
-          <option value="asia">Asia</option>
-          <option value="europe">Europe</option>
-          <option value="oceania">Oceania</option>
-        </select>
-      </div>
-
-      <div id="paises">
-        <h2 class="mb-6 text-xl font-bold text-text-primary sm:text-2xl">
-        Suggested countries
-      </h2>
-      
-      <section id="countries-container"
-      class="grid grid-cols-1 gap-6
-      sm:grid-cols-2
-      lg:grid-cols-3 lg:gap-8
-      xl:grid-cols-4" aria-label="Country list">
-        
+        <div id="paises">
+          <h2 class="mb-6 text-xl font-bold text-text-primary sm:text-2xl">
+            Suggested countries
+          </h2>
+          
+          <section 
+            id="countries-container"
+            class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4" 
+            aria-label="Country list">
+          </section>
+        </div>
       </section>
-      </div>
 
+      <section id="detail-view" hidden aria-live="polite"></section>
     </main>
+
 
     <footer class="w-full bg-surface-background">
       <div class="mx-auto flex w-[95%] max-w-none items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
