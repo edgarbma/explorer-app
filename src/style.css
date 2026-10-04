@@ -37,3 +37,8 @@
 	--font-primary: "PT Serif", serif;
 	--font-secondary: "Oswald", sans-serif;
 }
+
+:root {
+	--font-country-name: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+	--font-page-title: clamp(1.75rem, 1.25rem + 2vw, 2.75rem);
+}
