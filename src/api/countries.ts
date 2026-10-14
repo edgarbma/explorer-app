@@ -1,8 +1,6 @@
-// Demo docente: lee los datos publicados en Vercel, sin consultar REST Countries.
 import type { Country } from "../types/country";
 import type { CountryDetail } from "../types/country-detail";
 
-// Comparte una sola carga del JSON durante la sesión de la página.
 const LOCAL_DATA_URL: string = "/data/countries.json";
 
 let countriesPromise: Promise<CountryDetail[]> | undefined;
@@ -23,7 +21,6 @@ function loadCountries(): Promise<CountryDetail[]> {
 
       return data as CountryDetail[];
     })().catch((error: unknown) => {
-      // Permite reintentar si la descarga del archivo falla.
       countriesPromise = undefined;
       throw error;
     });

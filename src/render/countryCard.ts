@@ -5,14 +5,13 @@ export function renderCountryCard(country: Country): string {
     const capital: string = getCapital(country);
     const flagDescription: string = getFlagDescription(country);
     const formattedPopulation: string = formatPopulation(country.population);
-//country.flag?.url_svg || "/placeholder.svg"
     
     return `
         <article class="@container group flex w-full flex-col overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-within:ring-2 focus-within:ring-orange-500">        
             <div class="flex flex-col @min-[20rem]:flex-col w-full">
                 <div class="h-48 w-full shrink-0 overflow-hidden bg-gray-100">
                     <img 
-                        src="${country.flag?.url_svg || '/placeholder.png'}"
+                        src="${country.flag?.url_svg || '/placeholder.svg'}"
                         alt="${flagDescription}" 
                         class="h-full w-full object-cover"
                         loading="lazy"
