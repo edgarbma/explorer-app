@@ -15,7 +15,7 @@ export function renderCountryCard(country: Country): string {
                         alt="${flagDescription}" 
                         class="h-full w-full object-cover"
                         loading="lazy"
-                        onerror="this.onerror=null; this.src='/placeholder.png';">
+                        onerror="this.onerror=null; this.src='/placeholder.svg';">
                 </div>                
                 <div class="flex min-w-0 flex-1 flex-col justify-between p-5 text-center">
                     <div class="flex w-full flex-col items-center gap-2 text-center">

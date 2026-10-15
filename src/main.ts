@@ -7,7 +7,6 @@ import { debounce } from './utils/format';
 import { renderEmpty, renderError, renderLoading } from "./render/states";
 import { renderDetail } from "./render/detail";
 
-
 const menuButton: HTMLButtonElement | null =
     document.querySelector<HTMLButtonElement>("#menu-toggle");
 
@@ -138,14 +137,12 @@ async function router(): Promise<void> {
     }
 
     const hash: string = window.location.hash;
-    
-    if (hash === "" || hash === "#" || hash === "#home") {
+        if (hash === "" || hash === "#" || hash === "#home") {
         window.location.hash = "#/";
         return;
     }
 
     const match: RegExpMatchArray | null = hash.match(/^#\/country\/([A-Za-z0-9_-]+)$/);
-
     if (hash === "#/" || !match) {
         homeView.classList.remove("hidden");
         homeView.hidden = false;
