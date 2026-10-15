@@ -5,13 +5,11 @@ export function getCapital(country: Country): string {
         return "N/A";
     }
 
-    // Si capitals es un arreglo de objetos { name: string }
     const firstCapital = country.capitals[0];
     if (typeof firstCapital === "object" && firstCapital !== null && "name" in firstCapital) {
         return (firstCapital as { name: string }).name;
     }
 
-    // Si en algunos países viene como string directo
     if (typeof firstCapital === "string") {
         return country.capitals.join(", ");
     }
