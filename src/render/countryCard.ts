@@ -12,11 +12,11 @@ export function renderCountryCard(country: Country): string {
             <div class="flex flex-col @min-[20rem]:flex-col w-full">
                 <div class="h-48 w-full shrink-0 overflow-hidden bg-gray-100">
                     <img 
-                        src="${country.flag?.url_svg || '/placeholder.png'}"
+                        src="${country.flag?.url_svg || '/placeholder.svg'}"
                         alt="${flagDescription}" 
                         class="h-full w-full object-cover"
                         loading="lazy"
-                        onerror="this.onerror=null; this.src='/placeholder.png';">
+                        onerror="this.onerror=null; this.src='/placeholder.svg';">
                 </div>                
                 <div class="flex min-w-0 flex-1 flex-col justify-between p-5 text-center">
                     <div class="flex w-full flex-col items-center gap-2 text-center">

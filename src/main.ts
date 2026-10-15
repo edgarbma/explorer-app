@@ -7,8 +7,6 @@ import { debounce } from './utils/format';
 import { renderEmpty, renderError, renderLoading } from "./render/states";
 import { renderDetail } from "./render/detail";
 
-/* ---------- Menú ---------- */
-
 const menuButton: HTMLButtonElement | null =
     document.querySelector<HTMLButtonElement>("#menu-toggle");
 
@@ -42,8 +40,6 @@ menuButton?.addEventListener("click", () => {
     setMenuState(!isExpanded);
 });
 
-/* ---------- Elementos de la página ---------- */
-
 const countriesContainer: HTMLElement | null =
     document.querySelector<HTMLElement>("#countries-container");
 
@@ -56,12 +52,8 @@ const regionFilter: HTMLSelectElement | null =
 const homeView: HTMLElement | null = document.querySelector<HTMLElement>("#home-view");
 const detailView: HTMLElement | null = document.querySelector<HTMLElement>("#detail-view");
 
-/* ---------- Estado ---------- */
-
 let allCountries: Country[] = [];
 let isLoadingCountries: boolean = false;
-
-/* ---------- Filtros ---------- */
 
 function applyFilter(): void {
     if (!countriesContainer) return;
@@ -80,6 +72,11 @@ function applyFilter(): void {
         return;
     }
 
+    if (!query.trim() && !selectedRegion) {
+        countriesContainer.innerHTML = renderCountryGrid(filteredCountries.slice(0, 8));
+        return;
+    }
+
     countriesContainer.innerHTML = renderCountryGrid(filteredCountries);
 }
 
@@ -87,15 +84,12 @@ const debouncedApplyFilter = debounce(applyFilter, 300);
 countrySearch?.addEventListener("input", debouncedApplyFilter);
 regionFilter?.addEventListener("change", applyFilter);
 
-/* ---------- Carga de países sugeridos ---------- */
-
 async function loadCountries(): Promise<void> {
     if (!countriesContainer) {
         console.error("#countries-container not found.");
         return;
     }
 
-    // Evita peticiones duplicadas si ya hay una en curso
     if (isLoadingCountries) return;
     isLoadingCountries = true;
 
@@ -114,7 +108,7 @@ async function loadCountries(): Promise<void> {
             return;
         }
 
-        countriesContainer.innerHTML = renderCountryGrid(allCountries);
+        countriesContainer.innerHTML = renderCountryGrid(allCountries.slice(0, 8));
     } catch (error: unknown) {
         const message: string =
             error instanceof Error ? error.message : "Unknown error.";
@@ -136,8 +130,6 @@ async function loadCountries(): Promise<void> {
     }
 }
 
-/* ---------- Router (#/ y #/country/XX) ---------- */
-
 async function router(): Promise<void> {
     if (!homeView || !detailView) {
         console.error("Missing #home-view or #detail-view.");
@@ -145,16 +137,12 @@ async function router(): Promise<void> {
     }
 
     const hash: string = window.location.hash;
-    
-    // Normalizar hash inicial si está vacío o es solo "#"
-    if (hash === "" || hash === "#" || hash === "#home") {
+        if (hash === "" || hash === "#" || hash === "#home") {
         window.location.hash = "#/";
         return;
     }
 
     const match: RegExpMatchArray | null = hash.match(/^#\/country\/([A-Za-z0-9_-]+)$/);
-
-    // Vista de inicio
     if (hash === "#/" || !match) {
         homeView.classList.remove("hidden");
         homeView.hidden = false;
@@ -167,7 +155,6 @@ async function router(): Promise<void> {
         return;
     }
 
-    // Vista de detalle
     const code: string = match[1] ?? "";
 
     homeView.classList.add("hidden");
