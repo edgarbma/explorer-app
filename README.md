@@ -5,6 +5,15 @@ Es una aplicacion por le cual una persona puede acceder a ver informacion de cua
 ===
 
 # Características Principales
+Stack de tecnología: 
+Framework == vite 
+Lenguajes == TypeScrript, HTML y CSS
+Estilos == Tailwind CSS V4
+Logica UI == Esta es manipulacion directa del DOM y componentes de TypeScript
+Despliege == Vercel 
+Stack de tecnología: Framework == vite; Lenguajes == TypeScrript, HTML y CSS; Estilos == Tailwind CSS V4; Logica UI == Esta es manipulacion directa del DOM y componentes de TypeScript; Despliege == Vercel 
+
+Caracteristicas principales: 
 
 - Diseño Adaptable e Interactivo: Tarjetas de países de forma independiente a su contenedor (`@container`).
 - Tipografía Fluida: Implementación de `clamp()` para escalado automático de títulos y nombres de países sin perder legibilidad ni romper la maquetación.
@@ -58,3 +67,6 @@ Previo_Local: pnpm preview
 Repositorio_GitHub: ["Repositorio"](https://github.com/edgarbma/explorer-app.git)
 Pull_Request: ["GitHub Flow"](https://github.com/edgarbma/explorer-app/pull/1)
 Despliegue_Vercel: ["Vercel"](https://explorer-app-five.vercel.app/)
+Ejecutar el servicio de desaarrollo:
+pnpm dev
+pnpm dev

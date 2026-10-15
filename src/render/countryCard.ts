@@ -5,7 +5,6 @@ export function renderCountryCard(country: Country): string {
     const capital: string = getCapital(country);
     const flagDescription: string = getFlagDescription(country);
     const formattedPopulation: string = formatPopulation(country.population);
-//country.flag?.url_svg || "/placeholder.svg"
     
     return `
         <article class="@container group flex w-full flex-col overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-within:ring-2 focus-within:ring-orange-500">        
